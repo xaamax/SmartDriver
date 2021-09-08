@@ -1,0 +1,59 @@
+<nav class="navbar navbar-expand-lg navbar-dark bg-primary" *ngIf="showMenu">
+  <div class="container-fluid container">
+    <a class="navbar-brand fw-bold" routerLink="/dashboard"
+      >Smart Driver</a
+    >
+    <!-- <i class="fa fa-car iconmenu me-2"></i> -->
+    <button
+      class="navbar-toggler"
+      (click)="isCollapsed = !isCollapsed"
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarScroll"
+      aria-controls="navbarScroll"
+      aria-expanded="false"
+      aria-label="Toggle navigation"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+    <div
+      class="collapse navbar-collapse"
+      [collapse]="isCollapsed"
+      [isAnimated]="true"
+      id="navbarCollapse"
+    >
+      <ul class="navbar-nav me-auto"></ul>
+      <ul class="navbar-nav me-end">
+        <li class="nav-item dropdown" dropdown>
+          <a
+            dropdownToggle
+            class="nav-link dropdown-toggle"
+            style="cursor: pointer"
+            id="navbarDropdownMenuLink"
+            data-toggle="dropdown"
+            aria-haspopup="true"
+            aria-expanded="false"
+          >
+            <i class="fa fa-user-circle iconmenu me-1"></i>
+          </a>
+          <div
+            *dropdownMenu
+            class="dropdown-menu"
+            aria-labelledby="navbarDropdownMenuLink"
+          >
+            <a
+              class="dropdown-item"
+              (click)="Profile()"
+              style="cursor: pointer"
+              >Perfil</a
+            >
+            <div role="separator" class="divider"></div>
+            <a class="dropdown-item" (click)="Logout()" style="cursor: pointer"
+              >Sair</a
+            >
+          </div>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>

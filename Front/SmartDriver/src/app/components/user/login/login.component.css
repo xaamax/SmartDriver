@@ -1,0 +1,43 @@
+i {
+  font-size: 50px;
+}
+
+.form-control {
+  position: relative;
+  box-sizing: border-box;
+  text-align: center;
+  height: auto;
+  padding: 10px;
+  font-size: 16px;
+}
+
+.form-control:focus {
+  z-index: 2;
+}
+
+input[type="email"] {
+  margin-bottom: -1px;
+  border-bottom-right-radius: 0;
+  border-bottom-left-radius: 0;
+}
+
+input[type="password"] {
+  margin-bottom: 10px;
+  border-top-left-radius: 0;
+  border-top-right-radius: 0;
+}
+
+.login-wrapper {
+  display: flex;
+  flex-wrap: wrap;
+  overflow: hidden;
+  height: 100vh;
+}
+
+.wallpaper {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+  background: url(https://cdn.pixabay.com/photo/2016/01/19/17/57/car-1149997_960_720.jpg) no-repeat;
+  background-size: cover;
+}

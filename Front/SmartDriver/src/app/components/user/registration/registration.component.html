@@ -1,0 +1,144 @@
+<div class="login-wrapper">
+  <div class="col-sm-8 d-none d-md-block">
+    <div class="wallpaper"></div>
+  </div>
+
+  <div class="col-sm-4">
+    <div class="d-flex align-items-center vh-100">
+      <div class="mx-auto p-4 my-4">
+        <form *ngIf="registerForm" [formGroup]="registerForm" class="form-cadastro">
+          <div class="border-bottom">
+            <h3>Cadastre-se no Smart Driver</h3>
+            <p>É rápido e fácil!</p>
+          </div>
+          <div class="row">
+            <label class="form-label">Nome</label>
+            <div class="input-group">
+              <input
+                type="text"
+                class="form-control"
+                [ngClass]="validatorInput(f.fullName)"
+                formControlName="fullName"
+                placeholder="Insira o Nome Completo"
+              />
+              <div *ngIf="f.fullName.errors?.required" class="invalid-feedback">
+                (*) Campo obrigatório.
+              </div>
+              <div *ngIf="f.fullName.errors?.minlength" class="invalid-feedback">
+                (*) Mínimo 10 caracteres.
+              </div>
+              <div *ngIf="f.fullName.errors?.maxlength" class="invalid-feedback">
+                (*) Máximo 50 caracteres.
+              </div>
+            </div>
+            <div class="col-md-5">
+              <label class="form-label">UF</label>
+              <select class="form-select" formControlName="uf" [ngClass]="validatorInput(f.uf)">
+                <option *ngFor="let estado of Estados" [ngValue]="estado">{{ estado }}</option>
+              </select>
+              <div *ngIf="f.userName.errors?.required" class="invalid-feedback">
+                (*) Campo obrigatório.
+              </div>
+            </div>
+            <div class="col-md-7">
+              <label class="form-label">Departamento</label>
+              <select class="form-select" formControlName="dpto" [ngClass]="validatorInput(f.dpto)">
+                <option *ngFor="let dpto of Dptos(f.uf.value)" [ngValue]="dpto">{{ dpto }}</option>
+              </select>
+              <div *ngIf="f.dpto.errors?.required" class="invalid-feedback">
+                (*) Campo obrigatório.
+              </div>
+            </div>
+            <div class="col-md-12">
+            <label class="form-label">Setor</label>
+            <select class="form-select" formControlName="setor" [ngClass]="validatorInput(f.setor)">
+              <option *ngFor="let setor of Setores" [ngValue]="setor">{{ setor }}</option>
+            </select>
+            <div *ngIf="f.setor.errors?.required" class="invalid-feedback">
+              (*) Campo obrigatório.
+            </div>
+            </div>
+            <label class="form-label">Login</label>
+            <div class="input-group">
+              <input
+                type="text"
+                class="form-control"
+                [ngClass]="validatorInput(f.userName)"
+                formControlName="userName"
+                placeholder="Insira o Login"
+              />
+              <div *ngIf="f.userName.errors?.required" class="invalid-feedback">
+                (*) Campo obrigatório.
+              </div>
+              <div *ngIf="f.userName.errors?.minlength" class="invalid-feedback">
+                (*) Mínimo 6 caracteres.
+              </div>
+            </div>
+            <label class="form-label">Senha</label>
+            <div class="input-group">
+              <input
+                type="{{ exibirPass ? 'text' : 'password' }}"
+                class="form-control"
+                [ngClass]="validatorInput(f.password)"
+                formControlName="password"
+                placeholder="Insira a Senha"
+              />
+              <span
+                class="input-group-text"
+                style="cursor: pointer"
+                (click)="viewPass()"
+                ><i
+                  class="{{ exibirPass ? 'fa fa-eye-slash' : 'fa fa-eye' }}"
+                ></i
+              ></span>
+              <div *ngIf="f.password.errors?.required" class="invalid-feedback">
+                (*) Campo obrigatório.
+              </div>
+              <div *ngIf="f.password.errors?.minlength" class="invalid-feedback">
+                (*) Mínimo 4 caracteres.
+              </div>
+            </div>
+            <label class="form-label">Confirmar Senha</label>
+            <div class="input-group">
+              <input
+                type="{{ exibirConfirmPass ? 'text' : 'password' }}"
+                class="form-control"
+                [ngClass]="validatorInput(f.confirmPassword)"
+                formControlName="confirmPassword"
+                placeholder="Confirme a Senha"
+              />
+              <span
+                class="input-group-text"
+                style="cursor: pointer"
+                (click)="viewConfirmPass()"
+                ><i
+                  class="{{
+                    exibirConfirmPass ? 'fa fa-eye-slash' : 'fa fa-eye'
+                  }}"
+                ></i
+              ></span>
+              <div class="invalid-feedback">(*) Campo obrigatório.</div>
+            </div>
+          </div>
+
+          <div class="row mt-2 mb-3">
+            <div class="custom-control custom-checkbox">
+              <input
+                type="checkbox"
+                class="custom-control-input me-2"
+                id="customCheck1"
+              />
+              <label class="custom-control-label"
+                >Eu concordo com os <a href="#">Termos de Uso</a>.</label
+              >
+            </div>
+          </div>
+          <div class="d-grid text-center">
+            <button class="btn btn-lg btn-primary mb-2" [disabled]="!registerForm.valid" (click)="registration()">Registar</button>
+            <a routerLink="/user/login"><h5>Já sou cadastrado.</h5></a>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

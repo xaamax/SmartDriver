@@ -1,0 +1,43 @@
+<div class="login-wrapper">
+  <div class="col-sm-8 d-none d-md-block">
+    <div class="wallpaper"></div>
+  </div>
+
+  <div class="col-sm-4">
+    <div class="d-flex align-items-center">
+      <div class="mx-auto text-center p-5 my-5">
+        <form #loginForm="ngForm" (ngSubmit)="Login()">
+          <i class="fa fa-car mb-2"></i>
+          <h1 class="h3 mb-3 font-weight-normal">Smart Driver</h1>
+          <label for="username" class="sr-only">Usuário</label>
+          <input
+            type="text"
+            id="username"
+            class="form-control"
+            placeholder="Usuário"
+            name="username"
+            [(ngModel)]="model.username"
+            required
+          />
+          <label for="password" class="sr-only">Password</label>
+          <input
+            type="password"
+            id="password"
+            class="form-control"
+            placeholder="Senha"
+            name="password"
+            [(ngModel)]="model.password"
+            required
+          />
+          <div class="d-grid mt-4">
+            <button class="btn btn-lg btn-primary" type="submit">Entrar</button>
+          </div>
+          <p class="mt-4 mb-2 text-muted">
+            É novo por aqui? Cadastre-se abaixo
+          </p>
+          <a routerLink="/user/registration"><h5>Quero me cadastrar!</h5></a>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>

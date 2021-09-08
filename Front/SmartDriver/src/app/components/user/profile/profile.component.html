@@ -1,0 +1,164 @@
+<div class="container">
+  <div class="card rounded shadow-md mt-4 p-3">
+    <form *ngIf="profileForm" [formGroup]="profileForm">
+    <div class="row">
+      <div class="col-md-3 pt-1 mb-3">
+        <div class="card mb-3">
+          <div class="card-header"></div>
+          <div class="d-flex align-self-center pt-3">
+            <a>
+              <img
+                src="https://cdn.pixabay.com/photo/2012/04/26/19/43/profile-42914_960_720.png"
+                name="aboutme"
+                width="120"
+                height="110"
+                class="rounded-circle"
+              />
+            </a>
+          </div>
+          <div class="card-body">
+            <div class="h4 fw-bold text-center">@{{ user.userName }}</div>
+            <div style="font-size: 15px;">
+              <small class="p-1"><b>Nome:</b> {{ user.fullName }}</small><br>
+              <small class="p-1"><b>Setor:</b> {{ user.setor }}</small><br>
+              <small class="p-1"><b>Dpto:</b> {{ user.dpto }}</small><br>
+              <small class="p-1"><b>UF:</b> {{ user.uf }}</small>
+            </div>
+          </div>
+          <div class="card-footer"></div>
+        </div>
+      </div>
+      <div class="col-lg-9 mb-3">
+        <div class="row">
+          <div class="col-12">
+            <h4 class="border-bottom">Detalhe Perfil</h4>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Nome</label>
+            <input
+              type="text"
+              class="form-control"
+              [ngClass]="validatorInput(f.fullName)"
+              [(ngModel)]="user.fullName"
+              formControlName="fullName"
+              value="{{ user.fullName }}"
+              placeholder="Informe o Nome"
+            />
+            <div *ngIf="f.fullName.errors?.required" class="invalid-feedback">
+              (*) Campo obrigatório.
+            </div>
+            <div *ngIf="f.fullName.errors?.minlength" class="invalid-feedback">
+              (*) Mínimo 3 caracteres.
+            </div>
+            <div *ngIf="f.fullName.errors?.maxlength" class="invalid-feedback">
+              (*) Máximo 50 caracteres.
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Login</label>
+            <input
+              type="text"
+              class="form-control"
+              [ngClass]="validatorInput(f.userName)"
+              [(ngModel)]="user.userName"
+              formControlName="userName"
+              value="{{ user.userName }}"
+              placeholder="Insira o Login"
+            />
+            <div *ngIf="f.userName.errors?.required" class="invalid-feedback">
+              (*) Campo obrigatório.
+            </div>
+            <div *ngIf="f.userName.errors?.minlength" class="invalid-feedback">
+              (*) Mínimo 6 caracteres.
+            </div>
+            <div *ngIf="f.userName.errors?.maxlength" class="invalid-feedback">
+              (*) Máximo 12 caracteres.
+            </div>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-2">
+            <label class="form-label">UF</label>
+            <select class="form-select" formControlName="uf" [ngClass]="validatorInput(f.uf)" [(ngModel)]="user.uf">
+              <option *ngFor="let estado of Estados" [ngValue]="estado">{{ estado }}</option>
+            </select>
+            <div *ngIf="f.userName.errors?.required" class="invalid-feedback">
+              (*) Campo obrigatório.
+            </div>
+          </div>
+          <div class="col-md-5">
+            <label class="form-label">Departamento</label>
+            <select class="form-select" formControlName="dpto" [ngClass]="validatorInput(f.dpto)" [(ngModel)]="user.dpto">
+              <option *ngFor="let dpto of Dptos(f.uf.value)" [ngValue]="dpto">{{ dpto }}</option>
+            </select>
+            <div *ngIf="f.dpto.errors?.required" class="invalid-feedback">
+              (*) Campo obrigatório.
+            </div>
+          </div>
+          <div class="col-md-5">
+            <label class="form-label">Setor</label>
+            <select class="form-select" formControlName="setor" [ngClass]="validatorInput(f.setor)" [(ngModel)]="user.setor">
+              <option *ngFor="let setor of Setores" [ngValue]="setor">{{ setor }}</option>
+            </select>
+            <div *ngIf="f.setor.errors?.required" class="invalid-feedback">
+              (*) Campo obrigatório.
+            </div>
+          </div>
+        </div>
+        <div class="col-12">
+          <h4 class="pt-3 border-bottom">Alterar Senha</h4>
+        </div>
+        <div class="row">
+          <div class="col-md-6">
+            <label class="form-label">Informe a Senha</label>
+            <div class="input-group">
+              <input
+              type="{{ exibirPass ? 'text' : 'password' }}"
+                class="form-control"
+                [ngClass]="validatorInput(f.password)"
+                formControlName="password"
+                placeholder="Insira a Senha"
+              />
+              <span class="input-group-text" style="cursor: pointer;" (click)="viewPass()"><i class="{{ exibirPass ? 'fa fa-eye' : 'fa fa-eye-slash' }}"></i></span>
+              <div *ngIf="f.password.errors?.required" class="invalid-feedback">
+                (*) Campo obrigatório.
+              </div>
+              <div *ngIf="f.password.errors?.minlength" class="invalid-feedback">
+                (*) Mínimo 6 caracteres.
+              </div>
+            </div>
+          </div>
+          <div class="col-md-6">
+            <label class="form-label">Confirmar Senha</label>
+            <div class="input-group">
+              <input
+                type="{{ exibirConfirmPass ? 'text' : 'password' }}"
+                class="form-control"
+                [ngClass]="validatorInput(f.confirmPassword)"
+                formControlName="confirmPassword"
+                placeholder="Confirme a Senha"
+              />
+              <span class="input-group-text" style="cursor: pointer;" (click)="viewConfirmPass()"><i class="{{ exibirConfirmPass ? 'fa fa-eye' : 'fa fa-eye-slash' }}"></i></span>
+              <div class="invalid-feedback">
+                (*) Campo obrigatório.
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer">
+      <div class="d-grid gap-2 d-md-flex">
+        <button class="btn btn-danger me-md-auto"
+        (click)=" location.back();">
+          Cancelar Alteração
+        </button>
+        <button class="btn btn-success me-md-2" [ngClass]="{'disabled': !profileForm.valid }" (click)="salvar()">
+          <!-- <span class="spinner-border spinner-border-sm mr-1"></span> -->
+          Salvar Alteração
+        </button>
+      </div>
+    </div>
+  </form>
+</div>
+</div>

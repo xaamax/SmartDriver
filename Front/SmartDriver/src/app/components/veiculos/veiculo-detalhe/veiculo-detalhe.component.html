@@ -1,0 +1,151 @@
+<div class="card rounded shadow-sm p-3">
+  <form *ngIf="form" [formGroup]="form">
+    <div class="row">
+      <div class="col-md-3 mb-3">
+        <div class="card profile-card-2">
+            <img
+            class="card-img-top w-100"
+            src="https://cdn.pixabay.com/photo/2018/05/10/07/37/car-3386977_960_720.jpg"
+            />
+          <div class="card-body text-center">
+            <div class="h4 card-title fw-bold">{{ veiculo.placa | uppercase }}</div>
+            <div class="card-text">{{ veiculo.modelo | uppercase }}</div>
+            <small [ngClass]="{'d-none': !rodizio(veiculo.placa) }" class="{{ veiculo.rodizio == (hoje | titlecase) ? 'text-danger' : '' }}"><i class="fa {{ veiculo.rodizio == (hoje | titlecase) ? 'fa-exclamation-triangle me-2' : 'fa-road me-2' }}"></i>{{ diarodizio }}</small>
+            <div class="card-text mt-1">
+              <small class="{{ cssVeiculo(veiculo.situacao) }}"
+                ><i class="{{ veiculo.situacao ? icone(veiculo.situacao) : '' }}"></i
+                >{{ veiculo.situacao }}</small
+              >
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="col-md-9 mb-4">
+        <div class="row">
+          <div class="form-group col-sm-3">
+            <label class="form-label">Placa</label>
+            <input
+              type="text"
+              class="form-control"
+              [ngClass]="{
+                'is-invalid': f.placa.errors && f.placa.touched
+              }"
+              formControlName="placa"
+              placeholder="Insira a Placa"
+              mask="AAA9A99"
+              [(ngModel)]="veiculo.placa"
+              onkeyup="this.value = this.value.toUpperCase();"
+
+            />
+            <div *ngIf="f.placa.errors?.required" class="invalid-feedback">
+              (*) Campo obrigatório.
+            </div>
+            <div *ngIf="f.placa.errors?.minlength" class="invalid-feedback">
+              (*) Mínimo 7 caracteres.
+            </div>
+            <div *ngIf="f.placa.errors?.maxlength" class="invalid-feedback">
+              (*) Máximo 7 caracteres.
+            </div>
+          </div>
+          <div class="col-sm-6">
+            <label class="form-label">Modelo</label>
+            <input
+              type="text"
+              class="form-control"
+              [ngClass]="{
+                'is-invalid': f.modelo.errors && f.modelo.touched
+              }"
+              formControlName="modelo"
+              placeholder="Insira o Modelo"
+              [(ngModel)]="veiculo.modelo"
+              onkeyup="this.value = this.value.toUpperCase();"
+            />
+            <div *ngIf="f.modelo.errors?.required" class="invalid-feedback">
+              (*) Campo obrigatório.
+            </div>
+            <div *ngIf="f.modelo.errors?.minlength" class="invalid-feedback">
+              (*) Mínimo 3 caracteres.
+            </div>
+            <div *ngIf="f.modelo.errors?.maxlength" class="invalid-feedback">
+              (*) Máximo 10 caracteres.
+            </div>
+          </div>
+          <div class="col-sm-3">
+            <label class="form-label">Situação</label>
+            <select class="form-select" formControlName="situacao" [(ngModel)]="veiculo.situacao">
+              <option value="Em Uso">Em Uso</option>
+              <option value="Disponível">Disponível</option>
+              <option value="Indisponível">Indisponível</option>
+              <option value="Em Manutenção">Em Manutenção</option>
+            </select>
+            <div *ngIf="f.situacao.errors?.required" class="invalid-feedback">
+              (*) Campo obrigatório.
+            </div>
+          </div>
+          <div class="col-sm-3">
+            <label class="form-label">KM</label>
+            <input
+              type="text"
+              class="form-control"
+              [ngClass]="{
+                'is-invalid': f.km.errors && f.km.touched
+              }"
+              formControlName="km"
+              placeholder="KM..."
+              [(ngModel)]="veiculo.km"
+              mask="separator.0"
+              thousandSeparator="."
+            />
+            <div *ngIf="f.km.errors?.required" class="invalid-feedback">
+              (*) Campo obrigatório.
+            </div>
+          </div>
+          <div class="col-sm-3">
+            <label class="form-label">KM (última manutenção)</label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="manutencaokm"
+              placeholder="KM..."
+              [(ngModel)]="veiculo.manutencaokm"
+              mask="separator.0"
+              thousandSeparator="."
+            />
+          </div>
+          <div class="col-sm-3">
+            <label class="form-label">Rodízio</label>
+            <input
+              type="text"
+              class="form-control"
+              formControlName="rodizio"
+              value="{{ rodizio(veiculo.placa) }}"
+              [(ngModel)]="diarodizio"
+              placeholder="Dia do rodízio..."
+              readonly
+            />
+          </div>
+          <div class="col-sm-12">
+            <label class="form-label">Observação</label>
+            <textarea style="resize: none;"
+              [rows]=5
+              class="form-control"
+              placeholder="Insira observações do veículo..."
+              formControlName="obs"
+            ></textarea>
+          </div>
+        </div>
+      </div>
+    </div>
+    <div class="card-footer">
+      <div class="d-grid gap-2 d-md-flex">
+        <button class="btn btn-danger me-md-auto" (click)="resetForm()" >
+          Cancelar Alteração
+        </button>
+        <button class="btn btn-success me-md-2" [disabled]="!form.valid" (click)="salvar()" >
+          <!-- <span class="spinner-border spinner-border-sm mr-1"></span> -->
+          Salvar Alteração
+        </button>
+      </div>
+    </div>
+  </form>
+</div>

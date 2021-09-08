@@ -1,0 +1,344 @@
+<div class="card rounded shadow-sm p-3">
+  <div class="d-flex">
+    <div class="flex-fill pe-3 mb-2">
+      <div class="col-md-3">
+        <div class="input-group mb-3">
+          <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+          <input
+            type="text"
+            class="form-control"
+            placeholder="Data de saída"
+            bsDatepicker
+            [(ngModel)]="filtroDataSaida"
+            [bsConfig]="{
+              isAnimated: true,
+              adaptivePosition: true,
+              containerClass: 'theme-blue',
+              showWeekNumbers: false,
+              showTodayButton: true,
+              todayPosition: 'center',
+              todayButtonLabel: 'Hoje'
+            }"
+          />
+        </div>
+      </div>
+    </div>
+    <div>
+      <button class="d-flex btn btn-success" (click)="novaReserva(mreserva)">
+        <i class="fa fa-plus my-1"></i>
+      </button>
+    </div>
+  </div>
+  <table class="table table-striped table-hover">
+    <thead class="table-primary">
+      <tr>
+        <th>Nº</th>
+        <th>Situação</th>
+        <th>Condutor</th>
+        <th>Ação</th>
+      </tr>
+    </thead>
+    <tbody *ngIf="reservas && reservas.length">
+      <tr
+        *ngFor="let reserva of reservasFiltradas"
+        (click)="editarReserva(reserva, mreserva)"
+        style="cursor: pointer"
+      >
+        <td>{{ reserva.num }}</td>
+        <td>
+          <i
+            class="fa fa-lg {{
+              reserva.situacao == 'Confirmada'
+                ? 'fa-check text-success'
+                : 'fa-history text-warning'
+            }}"
+          ></i>
+        </td>
+        <td>
+          <small>{{ reserva.dadoscondutor[0].fullName }}</small>
+        </td>
+        <td>
+          <div class="btn-group">
+            <button
+              class="btn btn-danger"
+              (click)="
+                deleteReserva(
+                  $event,
+                  mexcluir,
+                  reserva.num,
+                  reserva.datasaida,
+                  reserva.dataretorno,
+                  reserva.destino,
+                  reserva.dadoscondutor[0].fullName
+                )
+              "
+              tooltip="Excluir"
+            >
+              <i class="fa fa-trash"></i>
+            </button>
+          </div>
+        </td>
+      </tr>
+    </tbody>
+    <tfoot *ngIf="!reservas.length || !reservasFiltradas.length">
+      <tr>
+        <td colspan="7" class="text-center text-danger">
+          <h5 class="text-danger">Nenhum registro encontrado.</h5>
+        </td>
+      </tr>
+    </tfoot>
+  </table>
+</div>
+
+<div
+  bsModal
+  #mreserva="bs-modal"
+  class="modal fade"
+  tabindex="-1"
+  role="dialog"
+  aria-labelledby="dialog-sizes-name1"
+>
+  <div class="modal-dialog modal-lg">
+    <div class="modal-content">
+      <div class="modal-header bg-primary text-white">Reserva de Veículo</div>
+      <div class="modal-body p-4">
+        <form [formGroup]="form">
+          <div class="row">
+            <div class="col-md-8">
+              <div class="row">
+                <div class="col-md-6">
+                  <label class="form-label">Data de Saída:</label>
+                  <div class="input-group">
+                    <input
+                      class="form-control"
+                      placeholder="dd/mm/aaaa"
+                      bsDatepicker
+                      [bsValue]="formatData(reserva.datasaida)"
+                      formControlName="datasaida"
+                      [bsConfig]="bsDateConfig"
+                      [ngClass]="validatorInput(f.datasaida)"
+                    />
+                    <div
+                      *ngIf="f.datasaida.errors?.required"
+                      class="invalid-feedback"
+                    >
+                      (*) Data inválida.
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Data de Retorno:</label>
+                  <div class="input-group">
+                    <input
+                      class="form-control"
+                      placeholder="dd/mm/aaaa"
+                      bsDatepicker
+                      formControlName="dataretorno"
+                      [bsValue]="formatData(reserva.dataretorno)"
+                      [bsConfig]="bsDateConfig"
+                      [ngClass]="{'is-invalid': f.dataretorno.touched && f.dataretorno.value < f.datasaida.value}"
+                    />
+                    <div class="invalid-feedback">
+                      (*) Data inválida.
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <label class="form-label">Destino:</label>
+                  <div class="input-group">
+                    <input
+                      type="text"
+                      placeholder="..."
+                      class="form-control"
+                      value="{{ reserva.destino }}"
+                      formControlName="destino"
+                      [ngClass]="validatorInput(f.destino)"
+                    />
+                    <div
+                      *ngIf="f.destino.errors?.required"
+                      class="invalid-feedback"
+                    >
+                      (*) Campo obrigatório.
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <label class="form-label">Motivo:</label>
+                  <div class="input-group">
+                    <input
+                      type="text"
+                      placeholder="..."
+                      class="form-control"
+                      value="{{ reserva.motivo }}"
+                      formControlName="motivo"
+                      [ngClass]="validatorInput(f.motivo)"
+                    />
+                    <div
+                      *ngIf="f.motivo.errors?.required"
+                      class="invalid-feedback"
+                    >
+                      (*) Campo obrigatório.
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Qtd. Pessoas:</label>
+                  <div class="input-group">
+                    <select
+                      class="form-select"
+                      formControlName="qtdpessoas"
+                      [ngClass]="validatorInput(f.qtdpessoas)"
+                    >
+                      <option value="1">1</option>
+                      <option value="2">2</option>
+                      <option value="3">3</option>
+                      <option value="4">4</option>
+                    </select>
+                    <div
+                      *ngIf="f.qtdpessoas.errors?.required"
+                      class="invalid-feedback"
+                    >
+                      (*) Campo obrigatório.
+                    </div>
+                  </div>
+                </div>
+                <div class="col-md-6">
+                  <label class="form-label">Fluig:</label>
+                  <div class="input-group">
+                    <input
+                      type="number"
+                      placeholder="..."
+                      class="form-control"
+                      value="{{ reserva.fluig }}"
+                      formControlName="fluig"
+                    />
+                  </div>
+                </div>
+                <div class="col-md-12">
+                  <label class="form-label">Observação:</label>
+                  <div class="input-group">
+                    <textarea
+                      style="resize: none"
+                      [rows]="3"
+                      placeholder="..."
+                      class="form-control"
+                      formControlName="obs"
+                    ></textarea>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="col-md-4 border mt-3 p-3 text-center">
+              <p
+                class="h4 fw-bold {{
+                  reserva.situacao != 'Confirmada'
+                    ? 'text-warning'
+                    : 'text-success'
+                }}"
+              >
+                <i
+                  class="fa {{
+                    reserva.situacao != 'Confirmada' ? 'fa-history' : 'fa-check'
+                  }} me-1"
+                ></i>
+                {{ reserva.situacao }}
+              </p>
+              <div *ngIf="reserva.situacao != 'Confirmada'">
+                <p>(*) Aguardando veículo destinado para utilização.</p>
+              </div>
+              <div *ngIf="reserva.situacao === 'Confirmada'">
+                <img
+                  class="card-img-top w-100"
+                  src="https://cdn.pixabay.com/photo/2018/05/10/07/37/car-3386977_960_720.jpg"
+                />
+                <div class="card-body text-center">
+                  <div class="input-group">
+                    <select
+                      class="form-select"
+                      formControlName="placaid"
+                      (change)="reserva.situacao === 'Confirmada' ? detalheVeiculo(form.value.placaid) : null"
+                      #placaid
+                    >
+                      <option
+                        *ngFor="let veiculo of veiculos"
+                        [ngValue]="veiculo.placa"
+                      >
+                        {{ veiculo.placa }}
+                      </option>
+                    </select>
+                  </div>
+                  <div *ngIf="form.value.placaid">
+                  <div class="card-text mt-3">{{ veiculo.modelo }}</div>
+                  <small
+                    [ngClass]="{ 'd-none': !rodizio(veiculo.placa) }"
+                    class="{{
+                      veiculo.rodizio == (hoje | titlecase) ? 'text-danger' : ''
+                    }}"
+                    ><i
+                      class="fa {{
+                        veiculo.rodizio == (hoje | titlecase)
+                          ? 'fa-exclamation-triangle me-2'
+                          : 'fa-road me-2'
+                      }}"
+                    ></i
+                    >{{ diarodizio }}</small
+                  >
+                  <div><small>KM: {{ veiculo.km }}</small></div>
+                </div>
+                </div>
+              </div>
+              <button
+              type="button"
+              class="btn btn-warning"
+              (click)="reservar()"
+            >
+              <i class="fa {{ reserva.situacao === 'Confirmada' ? 'fa-history' : 'fa-car' }} fa-lg me-1"></i>
+              {{ reserva.situacao === 'Confirmada' ? 'Aguardando Veículo' : 'Destinar Veículo' }}
+            </button>
+            </div>
+          </div>
+          <div class="row mt-3">
+            <div class="d-grid gap-2 d-md-flex">
+              <button
+                type="button"
+                class="btn btn-danger me-md-auto"
+                (click)="mreserva.hide()"
+              >
+                Cancelar Alteração
+              </button>
+              <button
+                type="button"
+                class="btn btn-success me-md-2"
+                [disabled]="!form.valid || reserva.situacao === 'Confirmada' && !form.value.placaid "
+                (click)="salvar(mreserva)"
+              >
+                Salvar Alteração
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+
+<ng-template #mexcluir>
+  <div class="modal-header bg-primary text-white">Confirmar exclusão?</div>
+  <div class="modal-body">
+    <small>
+      <p><b>Reserva: </b>{{ this.numreserva }}</p>
+      <p><b>Data de Saída: </b>{{ this.saidareserva | DateFormat }}</p>
+      <p><b>Data de Retorno: </b>{{ this.retornoreserva | DateFormat }}</p>
+      <p><b>Destino:</b> {{ this.reservadestino }}</p>
+      <p><b>Condutor:</b> {{ this.reservacondutor }}</p>
+    </small>
+    <div class="text-center">
+      <button type="button" class="btn btn-danger" (click)="decline()">
+        Não
+      </button>
+      <button type="button" class="btn btn-success" (click)="confirm()">
+        Sim
+      </button>
+    </div>
+  </div>
+</ng-template>

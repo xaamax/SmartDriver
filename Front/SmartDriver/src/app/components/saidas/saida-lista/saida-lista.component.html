@@ -1,0 +1,70 @@
+<div class="card rounded shadow-sm p-3">
+    <div class="d-flex">
+      <div class="col-md-3">
+      <div class="input-group mb-3">
+        <span class="input-group-text"><i class="fa fa-calendar"></i></span>
+        <input
+        class="form-control"
+        placeholder="Data de saída"
+        bsDatepicker
+        [(ngModel)]="filtroDataSaida"
+        [bsConfig]="{
+          isAnimated: true,
+          adaptivePosition: true,
+          containerClass: 'theme-blue',
+          showWeekNumbers: false,
+          showTodayButton: true,
+          todayPosition: 'center',
+          todayButtonLabel: 'Hoje'
+        }"
+      />
+      </div>
+      </div>
+    </div>
+    <table class="table table-striped table-hover">
+      <thead class="table-primary">
+        <tr>
+          <th>Nº</th>
+          <th>Retorno</th>
+          <th>Veículo</th>
+          <th>Ação</th>
+        </tr>
+      </thead>
+      <tbody  *ngIf="saidas && saidas.length">
+        <tr *ngFor="let saida of saidasFiltradas" (click)="detalheSaida(saida.id, saida.dadosveiculo[0].placa)" style="cursor: pointer;">
+          <td>{{ saida.id }}</td>
+          <td class="{{ !saida.dataretorno ? 'text-warning' : 'text-success' }}"><i class="fa fa-lg {{ !saida.dataretorno ? 'fa-history' : 'fa-check' }} me-1"></i></td>
+          <td>{{ saida.placaid }}</td>
+          <td>
+            <div class="btn-group">
+              <button
+                class="btn btn-danger"
+                tooltip="Excluir"
+                (click)="openModal($event, msaidaveiculo, saida.id, saida.dadosveiculo[0].placa)"
+              >
+                <i class="fa fa-trash"></i>
+              </button>
+            </div>
+          </td>
+        </tr>
+      </tbody>
+      <tfoot *ngIf="!saidas.length || !saidasFiltradas.length">
+        <tr>
+          <td colspan="7" class="text-center text-danger">
+            <h5 class="text-danger">Nenhum registro encontrado.</h5>
+          </td>
+        </tr>
+      </tfoot>
+    </table>
+</div>
+
+<ng-template #msaidaveiculo>
+  <div class="modal-header bg-primary text-white">Confirmar exclusão?</div>
+  <div class="modal-body text-center">
+    <p>
+    <b>Nº Saída: </b>{{ this.numsaida }}<br>
+    <b>Placa: </b>{{ this.veiculo }}</p>
+    <button type="button" class="btn btn-danger" (click)="decline()">Não</button>
+    <button type="button" class="btn btn-success" (click)="confirm()">Sim</button>
+  </div>
+</ng-template>

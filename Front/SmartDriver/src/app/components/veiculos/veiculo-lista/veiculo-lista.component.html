@@ -1,0 +1,130 @@
+<div class="card rounded shadow-sm p-3">
+  <div class="d-flex">
+    <div class="flex-fill pe-3">
+      <div class="input-group">
+        <span class="input-group-text"><i class="fa fa-search"></i></span>
+        <input
+          type="text"
+          class="form-control"
+          placeholder="Buscar por placa ou modelo..."
+          [(ngModel)]="filtroVeiculos"
+        />
+      </div>
+    </div>
+    <div>
+      <button class="d-flex btn btn-success" routerLink="/veiculos/veiculo">
+        <i class="fa fa-plus my-1"></i>
+      </button>
+    </div>
+  </div>
+  <div class="row">
+    <div class="col-sm-3 p-3" *ngFor="let veiculo of veiculosFiltrados">
+      <div class="card shadow-sm">
+        <img
+          class="card-img-top w-100"
+          src="https://cdn.pixabay.com/photo/2018/05/10/07/37/car-3386977_960_720.jpg"
+        />
+        <div class="card-body text-center">
+          <div class="h4 fw-bold card-title">{{ veiculo.placa }}</div>
+          <div class="card-text">{{ veiculo.modelo }}</div>
+          <small
+            [ngClass]="{ 'd-none': veiculo.uf != 'SP' }"
+            class="{{
+              veiculo.rodizio == (hoje | titlecase) ? 'text-danger' : ''
+            }}"
+            ><i
+              class="fa {{
+                veiculo.rodizio == (hoje | titlecase)
+                  ? 'fa-exclamation-triangle me-2'
+                  : 'fa-road me-2'
+              }}"
+            ></i
+            >{{ veiculo.rodizio }}</small
+          >
+          <div class="card-text mt-1">
+            <small class="{{ cssVeiculo(veiculo.situacao) }}"
+              ><i class="{{ icone(veiculo.situacao) }}"></i
+              >{{ veiculo.situacao }}</small
+            >
+          </div>
+        </div>
+        <ul class="list-group list-group-flush border-bottom-0">
+          <li class="list-group-item">
+            <div class="row">
+              <div class="col-6 text-center">
+                <small class="text-muted">KM Atual</small>
+                <div class="h5">{{ veiculo.km }}</div>
+              </div>
+              <div class="col-6 text-center">
+                <small class="text-muted">KM Manutenção</small>
+                <div
+                  class="h5 {{
+                    veiculo.km > +veiculo.manutencaokm + 10000 &&
+                    veiculo.manutencaokm > 0
+                      ? 'text-danger'
+                      : ''
+                  }}"
+                >
+                  <i
+                    class="fa fa-sm {{
+                      veiculo.km > +veiculo.manutencaokm + 10000 &&
+                      veiculo.manutencaokm > 0
+                        ? 'fa-exclamation-triangle me-2'
+                        : ''
+                    }}"
+                  ></i
+                  >{{ veiculo.manutencaokm }}
+                </div>
+              </div>
+            </div>
+          </li>
+        </ul>
+        <div class="d-flex m-auto pb-4">
+          <div class="btn-group">
+            <button
+              class="btn btn-lg btn-warning"
+              tooltip="Editar"
+              routerLink="/veiculos/veiculo/{{ veiculo.placa }}"
+            >
+              <i class="fa fa-edit"></i>
+            </button>
+            <button
+              class="btn btn-lg btn-success"
+              tooltip="Saída"
+              routerLink="/saidas/saida/veiculo/{{ veiculo.placa }}"
+            >
+              <i class="fa fa-sign-out-alt"></i>
+            </button>
+            <button
+            class="btn btn-lg btn-danger"
+            tooltip="Excluir"
+            (click)="
+            openModal($event, mveiculo, veiculo.placa)
+          "
+          >
+            <i class="fa fa-trash"></i>
+          </button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+  <div class="text-danger text-center" *ngIf="!veiculosFiltrados.length">
+    <h5>Nenhum registro encontrado.</h5>
+  </div>
+</div>
+
+<ng-template #mveiculo>
+  <div class="modal-header bg-primary text-white">Confirmar exclusão?</div>
+  <div class="modal-body text-center">
+    <p>
+      <b>Placa: </b>{{ this.placa }}
+    </p>
+    <button type="button" class="btn btn-danger" (click)="decline()">
+      Não
+    </button>
+    <button type="button" class="btn btn-success" (click)="confirm()">
+      Sim
+    </button>
+  </div>
+</ng-template>
