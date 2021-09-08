@@ -10,7 +10,7 @@
 *.userosscache
 *.sln.docstates
 
-# Removendo pasta Vode
+
 .vscode
 .vs
 
