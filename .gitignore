@@ -63,6 +63,8 @@ artifacts/
 
 # Tye
 .tye/
+# Removendo pasta VSCode
+.vscode
 
 # StyleCop
 StyleCopReport.xml
