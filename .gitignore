@@ -10,6 +10,10 @@
 *.userosscache
 *.sln.docstates
 
+# Removendo pasta Vode
+.vscode
+.vs
+
 # User-specific files (MonoDevelop/Xamarin Studio)
 *.userprefs
 
@@ -63,8 +67,7 @@ artifacts/
 
 # Tye
 .tye/
-# Removendo pasta VSCode
-.vscode
+
 
 # StyleCop
 StyleCopReport.xml
