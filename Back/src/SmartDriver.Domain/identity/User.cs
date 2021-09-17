@@ -20,5 +20,6 @@ namespace SmartDriver.Domain.identity
         public List<UserRole> UserRoles { get; set; }
         public IEnumerable<Saida> Saidas { get; set; }
         public IEnumerable<Reserva> Reservas { get; set; }
+        public IEnumerable<Abastecimento> Abastecimentos { get; set; }
     }
 }

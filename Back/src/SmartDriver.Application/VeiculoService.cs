@@ -128,7 +128,6 @@ namespace SmartDriver.Application
         }
         catch (Exception err)
         {
-
             throw new Exception(err.Message);
         }
     }

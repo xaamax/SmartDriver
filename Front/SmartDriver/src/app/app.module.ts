@@ -46,6 +46,7 @@ import { VeiculoService } from './services/veiculo.service';
 import { SaidaService } from './services/saida.service';
 import { UserService } from './services/user.service';
 import { ReservaService } from './services/reserva.service';
+import { AbastecimentoService } from './services/abastecimento.service';
 
 import { DateTimeFormatPipe } from './helpers/DateTimeFormat.pipe';
 import { DateFormatPipe } from './helpers/DateFormat.pipe';
@@ -104,6 +105,7 @@ defineLocale('pt-br', ptBrLocale);
     SaidaService,
     ReservaService,
     UserService,
+    AbastecimentoService,
     {
       provide: HTTP_INTERCEPTORS,
       useClass: AuthInterceptor,

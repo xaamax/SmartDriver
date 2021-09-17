@@ -83,6 +83,9 @@ namespace SmartDriver.API
             services.AddScoped<iReservaService, ReservaService>();
             services.AddScoped<iReservaPersist, ReservaPersist>();
 
+            services.AddScoped<iAbastecimentoService, AbastecimentoService>();
+            services.AddScoped<iAbastecimentoPersist, AbastecimentoPersist>();
+
 
             services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
 

@@ -15,6 +15,7 @@ namespace SmartDriver.Persistence.Contexts
         public DbSet<Veiculo> Veiculos { get; set; }
         public DbSet<Saida> Saidas { get; set; }
         public DbSet<Reserva> Reservas { get; set; }
+        public DbSet<Abastecimento> Abastecimentos { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

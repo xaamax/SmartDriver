@@ -19,7 +19,7 @@
   </div>
   <div class="row">
     <div class="col-sm-3 p-3" *ngFor="let veiculo of veiculosFiltrados">
-      <div class="card shadow-sm">
+      <div class="card shadow-sm" style="cursor: pointer;" (click)="detalheVeiculo(veiculo.placa)">
         <img
           class="card-img-top w-100"
           src="https://cdn.pixabay.com/photo/2018/05/10/07/37/car-3386977_960_720.jpg"
@@ -81,13 +81,6 @@
         </ul>
         <div class="d-flex m-auto pb-4">
           <div class="btn-group">
-            <button
-              class="btn btn-lg btn-warning"
-              tooltip="Editar"
-              routerLink="/veiculos/veiculo/{{ veiculo.placa }}"
-            >
-              <i class="fa fa-edit"></i>
-            </button>
             <button
               class="btn btn-lg btn-success"
               tooltip="Saída"

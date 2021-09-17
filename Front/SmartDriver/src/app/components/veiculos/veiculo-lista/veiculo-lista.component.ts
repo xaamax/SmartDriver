@@ -5,6 +5,7 @@ import { Veiculo } from '@app/models/Veiculo';
 import { VeiculoService } from '@app/services/veiculo.service';
 import * as moment from 'moment';
 import { BsModalRef, BsModalService } from 'ngx-bootstrap/modal';
+import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-veiculo-lista',
@@ -40,6 +41,7 @@ export class VeiculoListaComponent implements OnInit {
     private veiculoService: VeiculoService,
     private toastr: ToastrService,
     private spinner: NgxSpinnerService,
+    private router: Router,
   ) { }
 
   public ngOnInit(): void {
@@ -76,6 +78,10 @@ export class VeiculoListaComponent implements OnInit {
         veiculo.placa.toLowerCase().indexOf(filtrarPor) !== -1 ||
         veiculo.modelo.toLowerCase().indexOf(filtrarPor) !== -1
     );
+  }
+
+  public detalheVeiculo(placa: string): any {
+    return this.router.navigate([`/veiculos/veiculo/${placa}`]);
   }
 
   public alternarImg(): void {
